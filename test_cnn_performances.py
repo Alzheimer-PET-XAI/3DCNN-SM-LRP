@@ -3,7 +3,7 @@
 """
 Created on Thu May 26 09:15:00 2022
 
-@author: lisadesanti
+@author: ##########
 
 
 Test Classification's performaces of the trained network in the test set.
