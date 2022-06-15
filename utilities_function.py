@@ -6,17 +6,96 @@ Created on Thu May 26 09:15:44 2022
 @author: #################
 """
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 import math
-from skimage import transform
-from sklearn.cluster import KMeans
-from skimage import measure
+import os
+import pydicom
 
+
+def ADNI_complete_directory(root_dir, d=96):
+    
+    """
+    Build the array containing the path used to read ADNI acquisition.
+    
+    Downloading PET scans from ADNI repositories files are organized using the 
+    following structure:
+        
+        ADNI/class_label/subj_ID/...
+        Coreg,_Avg,_Std_Img_and_Vox_Siz,_Uniform_Resolution/data_exam/I#####/
+        
+    Inside "I#####" folder you can find all the dicom slices.
+        
+    
+    Attributes
+    --------------------
+    root_dir: string
+        Path were you stored "ADNI" folder containing all the acquisitions
+    d: int
+        number of slices
+    ....
+
+    Output
+    ------
+    Return: (numpy.ndarray, numpy.ndarray)
+        directories 
+        label 
+    
+    """
+    
+    
+    data_labels = {0:"CN", 1:"MCI", 2:"AD"};
+    num = 0;
+    pet_directories = [];
+    pet_labels = [];
+    
+    for key_label, data_label in data_labels.items():
+        
+        # subject level
+        subj_list = os.listdir(os.path.join(root_dir, data_label)); 
+        
+        for s in subj_list: 
+            
+            # Extract the folder: 
+            # Coreg,_Avg,_Std_Img_and_Vox_Siz,_Uniform_Resolution
+            preproc = os.listdir(os.path.join(root_dir, data_label, s)); 
+            
+            for p in preproc:
+   
+                # exams level, folder's name = data of acquisitions
+                acquisitions = os.listdir(os.path.join(root_dir, data_label, s, p));
+                for a in acquisitions: 
+
+                    # ID ‘I#####’
+                    idsub = os.listdir(os.path.join(root_dir, data_label, s, p, a));
+                    idsub = idsub[0]; # list idsub has always one item
+                    pet_directory = os.path.join(root_dir, data_label, s, p, a, idsub);
+                    name_slices = os.listdir(os.path.join(root_dir, data_label, s, p, a, idsub));
+                    
+                    # Inside ‘I#####’ folder we can find all the slices which
+                    # constitute the 3D acquisition.
+                    # SLices are stored in DICOM format 
+                    
+                    if len(name_slices) != d:
+                        print('N°slices !=' + str(d));
+                        # Check the expected number of slices
+                        break;
+                        
+                    img = name_slices[0];
+                    i = os.path.join(root_dir, data_label, s, p, a, idsub, img); # directory slice i-esima
+                    slice_i = pydicom.dcmread(i, force=True);
+ 
+                    if hasattr(slice_i, 'ImagePositionPatient'):
+                        # Check the header's field to sort slices
+                        pet_directories.append(pet_directory);
+                        pet_labels.append(key_label);
+                    else:
+                        break;
+                        
+    return pet_directories, pet_labels
 
 
 def get_model_CNN1(width, height, depth, num_classes=3):
