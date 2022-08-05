@@ -3,7 +3,7 @@
 """
 Created on Thu May 26 09:15:44 2022
 
-@author: #################
+@author:
 """
 
 import numpy as np
@@ -98,7 +98,7 @@ def ADNI_complete_directory(root_dir, d=96):
     return pet_directories, pet_labels
 
 
-def get_model_CNN1(width, height, depth, num_classes=3):
+def get_model_CNN(width, height, depth, num_classes=3):
     
     """  
     Define 3D CNN Network Model
@@ -368,52 +368,3 @@ def test_performance(CM):
                       "Matthew Correlation Coefficient":mcc_ad};
     
     return performance_cn, performance_mci, performance_ad
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
