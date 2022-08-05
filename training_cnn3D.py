@@ -17,7 +17,7 @@ Augmentation type:
     - Rototranslation
     - Zoom
     
-TFRecord files were created launching 'kfold_data_augmentation_tfrecord.py'
+TFRecord files were created launching 'create_tfrecord.py'
 file
 
 """
