@@ -13,8 +13,9 @@ We downloaded an amout of 2552 images pre-processed by ADNI team. We selected co
 <h2> Files </h2> 
 With the aim to promote reproducibility and open-accessible results for other researchers and practictioners, we provide all the Python codes and CNN's weights obtained during one training sessions.
 <ul>
-  <li> <em>cnn3D_weights.h5:</em> Model's weight obtained during one of the training session (kfold #1)</li>
-  <li>Second item</li>
-  <li>Third item</li>
-  <li>Fourth item</li>
+  <li><em>cnn3D_weights.h5:</em> Model's weight obtained during one of the training session (kfold #1).</li>
+  <li><em>create_tfrecord.py:</em></li> Load dicom directories, split dataset into Training, Validation and Test set and apply data augmentation to the training set. Save the three dataset into .tfrecord files, a file format which allows us to process large datasets that do not fit in memory.
+  <li><em>training_cnn3D.py:</em></li> CNN's training process.
+  <li><em>test_cnn3D.py:</em></li> CNN's test.
+  <li><em>utilities_function.py:</em></li> Collection of functions. 
 </ul>
