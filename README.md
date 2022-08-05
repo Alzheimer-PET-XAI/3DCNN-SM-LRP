@@ -13,7 +13,7 @@ We downloaded an amout of 2552 images pre-processed by ADNI team. We selected co
 <h2> Files </h2> 
 With the aim to promote reproducibility and open-accessible results for other researchers and practictioners, we provide all the Python codes and CNN's weights obtained during one training sessions.
 <ul>
-  <li> <em> cnn3D_weights.h5 </em>: model's weight obtained during one of the training session (kfold #1)</li>
+  <li> <em>cnn3D_weights.h5:</em> Model's weight obtained during one of the training session (kfold #1)</li>
   <li>Second item</li>
   <li>Third item</li>
   <li>Fourth item</li>
