@@ -4,7 +4,7 @@
 Created on Wed Jun 15 17:31:20 2022
 
 
-@author: ##################
+@author: 
 
 Create Training, Validation and Test TFRecord files performing Iterated Kfold
 cross-validation and applying a radom data augmentation on the training set.
@@ -382,67 +382,3 @@ for num in range(img_num_test):
     i+=1;
     
 writer.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
