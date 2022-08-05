@@ -1,4 +1,5 @@
 # 3DCNN-SM-LRP
+In our work we developed, trained and tested a 3D Convolutional Neural Network (CNN) which takes as input volumetric Brain 18F-FDG PET images to predict the clinical diagnosis in Alzheimer's Disease. The CNN perform a multiclass classification task (n° classes = 3); the output returned can be: Cognitive Normal (CN), Mild Cognitive Impairment (MCI) and Alzheimer's Disease (AD).
 
 # Data 
 The FDG PET scans employed were obtained from the Alzheimer Disease Neuroimaging Initiative (ADNI), data can be downloaded at http://adni.loni.usc.edu/ after applying for the access.
