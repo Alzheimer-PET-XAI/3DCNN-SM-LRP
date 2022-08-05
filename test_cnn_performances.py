@@ -3,10 +3,10 @@
 """
 Created on Thu May 26 09:15:00 2022
 
-@author: ##########
+@author:
 
 
-Test Classification's performaces of the trained network in the test set.
+Test trained CNN's performaces on the Test set.
 
 The FDG PET scans employed were obtained from the Alzheimer Disease 
 Neuroimaging Initiative (ADNI), data can be downloaded at
@@ -20,7 +20,7 @@ can be combined to measure the progression of mild cognitive impairment (MCI)
 and early Alzheimer’s disease (AD).
 
 The model's weight obtained during one of the training session has been 
-provided in the folder.
+provided as 'cnn3D_weights.h5'.
 
 """
 
