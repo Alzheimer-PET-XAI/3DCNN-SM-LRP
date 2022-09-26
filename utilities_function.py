@@ -16,96 +16,58 @@ import os
 import pydicom
 
 
-def ADNI_complete_directory(root_dir, d=96):
-    
-    """
-    Build the array containing the path used to read ADNI acquisition.
-    
-    Downloading PET scans from ADNI repositories files are organized using the 
-    following structure:
-        
-        ADNI/class_label/subj_ID/...
-        Coreg,_Avg,_Std_Img_and_Vox_Siz,_Uniform_Resolution/data_exam/I#####/
-        
-    Inside "I#####" folder you can find all the dicom slices.
-        
-    
-    Attributes
-    --------------------
-    root_dir: string
-        Path were you stored "ADNI" folder containing all the acquisitions
-    d: int
-        number of slices
-    ....
+def list_ADNI_directories(root_dir, d):
 
-    Output
-    ------
-    Return: (numpy.ndarray, numpy.ndarray)
-        directories 
-        label 
-    
-    """
-    
-    
     data_labels = {0:"CN", 1:"MCI", 2:"AD"};
     num = 0;
     pet_directories = [];
+    pet_directiories_dic = [];
     pet_labels = [];
     
-    for key_label, data_label in data_labels.items():
-        
-        # subject level
+    for key_label, data_label in data_labels.items():     
         subj_list = os.listdir(os.path.join(root_dir, data_label)); 
         
-        for s in subj_list: 
-            
-            # Extract the folder: 
-            # Coreg,_Avg,_Std_Img_and_Vox_Siz,_Uniform_Resolution
-            preproc = os.listdir(os.path.join(root_dir, data_label, s)); 
+        for s in subj_list: # loop over subject
+            preproc = os.listdir(os.path.join(root_dir, data_label, s));
             
             for p in preproc:
-   
-                # exams level, folder's name = data of acquisitions
                 acquisitions = os.listdir(os.path.join(root_dir, data_label, s, p));
-                for a in acquisitions: 
-
-                    # ID ‘I#####’
+                
+                for a in acquisitions: # subject acquisition (every subject has different exams)
                     idsub = os.listdir(os.path.join(root_dir, data_label, s, p, a));
-                    idsub = idsub[0]; # list idsub has always one item
+                    idsub = idsub[0]; # id ‘I#####’ (always with one element)
+                    
+                    # DIRECTORY TO SAVE
                     pet_directory = os.path.join(root_dir, data_label, s, p, a, idsub);
+                    pet_directory_dic = {"ROOT":root_dir, "LABEL":data_label, "SUBJ":s, "PREPROC":p, "DATE":a, "EXAM_ID":idsub};
+                    # slices 
                     name_slices = os.listdir(os.path.join(root_dir, data_label, s, p, a, idsub));
-                    
-                    # Inside ‘I#####’ folder we can find all the slices which
-                    # constitute the 3D acquisition.
-                    # SLices are stored in DICOM format 
-                    
+
                     if len(name_slices) != d:
-                        print('N°slices !=' + str(d));
-                        # Check the expected number of slices
+                        print('# slices !=' + str(d));
                         break;
                         
                     img = name_slices[0];
-                    i = os.path.join(root_dir, data_label, s, p, a, idsub, img); # directory slice i-esima
+                    i = os.path.join(root_dir, data_label, s, p, a, idsub, img); # directory of slice i
                     slice_i = pydicom.dcmread(i, force=True);
- 
+
                     if hasattr(slice_i, 'ImagePositionPatient'):
-                        # Check the header's field to sort slices
                         pet_directories.append(pet_directory);
+                        pet_directiories_dic.append(pet_directory_dic);
                         pet_labels.append(key_label);
                     else:
+                        print('Missing attributes!'); 
                         break;
                         
-    return pet_directories, pet_labels
+    return pet_directiories_dic
 
 
 def get_model_CNN(width, height, depth, num_classes=3):
     
     """  
     Define 3D CNN Network Model
-        
     FeaturesExtractor -> Global Avg Pooling -> Fully Connected -> Classifier
     ....
-    
     
     Attributes
     --------------------
@@ -117,17 +79,14 @@ def get_model_CNN(width, height, depth, num_classes=3):
         Input tensor depth, conv_dim3
     num_classes: int
         Number of classes
-    
     ....
 
     Output
     ------
     Return: keras.Model()
-    
     ....
     
     NOTE: 
-        
     Input shape: 
         5D tensor (data_format = "channel_last")
         batch_dim + (conv_dim1, conv_dim2, conv_dim3, channels)
